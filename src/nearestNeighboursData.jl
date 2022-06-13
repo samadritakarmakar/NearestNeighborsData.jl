@@ -13,6 +13,13 @@ struct KDDataTree <: AbstractDataTree
     tree::KDTree
 end
 
+function BallDataTree(refData::RefData, dimension::Int64 = 3)
+    if refData.points isa AbstractVector
+        return BallDataTree(refData, BallTree(reshape(refData.points, dimension, Int64(length(refData.points)/dimension))))
+    end
+    return BallDataTree(refData, BallTree(refData.points))
+end
+
 function BallDataTree(data::Union{Dict, Matrix}, points::Union{Dict, Vector, Matrix})
     refData = RefData(data, points)
     BallDataTree(refData, BallTree(refData.points))
@@ -23,6 +30,17 @@ function BallDataTree(dataVector::Vector{Float64}, problemDim::Int64, points::Un
     BallDataTree(refData, BallTree(refData.points))
 end
 
+function KDDataTree(refData::RefData, dimension::Int64 = 3)
+    if refData.points isa AbstractVector
+        return KDDataTree(refData, BallTree(reshape(refData.points, dimension, Int64(length(refData.points)/dimension))))
+    end
+    return KDDataTree(refData, BallTree(refData.points))
+end
+
+function KDDataTree(data::Union{Dict, Matrix}, points::Union{Dict, Vector, Matrix})
+    refData = RefData(data, points)
+    KDDataTree(refData, KDTree(refData.points))
+end
 
 function KDDataTree(data::Union{Dict, Matrix}, points::Union{Dict, Vector, Matrix})
     refData = RefData(data, points)
@@ -31,7 +49,7 @@ end
 
 function KDDataTree(dataVector::Vector{Float64}, problemDim::Int64, points::Union{Dict, Vector, Matrix})
     refData = RefData(dataVector, problemDim, points)
-    BallDataTree(refData, KDTree(refData.points))
+    KDDataTree(refData, KDTree(refData.points))
 end
 
 function knnData(dataTree::AbstractDataTree, point::AbstractVector{Float64}, k::Int64, sortres = true)

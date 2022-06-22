@@ -1,7 +1,7 @@
 name = "NearestNeighborsData"
 uuid = "06df0e33-d776-4d3a-8856-017b70f8fcf5"
 authors = ["sam <samadritakarmakar@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 NearestNeighbors = "b8a86587-4115-5ab1-83bc-aa920d37bbce"

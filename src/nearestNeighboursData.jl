@@ -81,3 +81,26 @@ function nnData(dataTree::AbstractDataTree, point::AbstractVector{Float64})
     knnDataSet = knnData(dataTree, point, 1)
     nnData(knnDataSet.dataVector[1], knnDataSet.knnDists[1], knnDataSet.actualIndexVector[1], knnDataSet.dataPoints[:,1])
 end
+
+struct inrangeData{T, I}
+    dataVector::Vector{T}
+    actualIndexVector::Vector{I}
+    dataPoints::Matrix{Float64}
+    noOfPointsFound::Int64
+end
+
+function inrangeData(dataTree::AbstractDataTree, point::AbstractVector{Float64}, radius::Float64, sortres = true)
+    inrangeIdxs = inrange(dataTree.tree, point, radius, sortres)
+    k = length(inrangeIdxs)
+    ty1 = typeof(dataTree.refData.dataDict)
+    dataVector = Vector{ty1.parameters[2]}(undef, k)
+    ty2 = typeof(dataTree.refData.pointToActualIndexMap)
+    actualIndexVector = Vector{ty2.parameters[2]}(undef, k)
+    pointsMatrix = zeros(length(point), k)
+    for i ∈ 1:k
+        dataVector[i] = dataTree.refData.dataDict[inrangeIdxs[i]]
+        actualIndexVector[i] = dataTree.refData.pointToActualIndexMap[inrangeIdxs[i]]
+        pointsMatrix[:,i] .= dataTree.refData.points[:,inrangeIdxs[i]]
+    end
+    return inrangeData(dataVector, actualIndexVector, pointsMatrix, k)
+end

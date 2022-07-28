@@ -96,7 +96,7 @@ function knnUniqueData(dataTree::AbstractDataTree, points::AbstractMatrix{Float6
     dataVector = Vector{ty1.parameters[2]}(undef, total_k)
     ty2 = typeof(dataTree.refData.pointToActualIndexMap)
     actualIndexVector = Vector{ty2.parameters[2]}(undef, total_k)
-    pointsMatrix = zeros(length(point), total_k)
+    pointsMatrix = zeros(size(points, 1), total_k)
     for i ∈ 1:total_k
         dataVector[i] = dataTree.refData.dataDict[knnIdxs[i]]
         actualIndexVector[i] = dataTree.refData.pointToActualIndexMap[knnIdxs[i]]

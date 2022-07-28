@@ -56,7 +56,7 @@ struct knnData{T, I}
     dataPoints::Matrix{Float64}
 end
 
-function knnData(dataTree::AbstractDataTree, points::AbstractVector{Float64}, k::Int64, sortres = true)
+function knnData(dataTree::AbstractDataTree, point::AbstractVector{Float64}, k::Int64, sortres = true)
     knnIdxs, knnDists = knn(dataTree.tree, point, k, sortres)
     ty1 = typeof(dataTree.refData.dataDict)
     dataVector = Vector{ty1.parameters[2]}(undef, k)

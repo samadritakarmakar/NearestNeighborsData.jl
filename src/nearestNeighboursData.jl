@@ -56,7 +56,7 @@ struct knnData{T, I}
     dataPoints::Matrix{Float64}
 end
 
-function knnData(dataTree::AbstractDataTree, point::AbstractVector{Float64}, k::Int64, sortres = true)
+function knnData(dataTree::AbstractDataTree, points::AbstractVector{Float64}, k::Int64, sortres = true)
     knnIdxs, knnDists = knn(dataTree.tree, point, k, sortres)
     ty1 = typeof(dataTree.refData.dataDict)
     dataVector = Vector{ty1.parameters[2]}(undef, k)
@@ -80,6 +80,29 @@ end
 function nnData(dataTree::AbstractDataTree, point::AbstractVector{Float64})
     knnDataSet = knnData(dataTree, point, 1)
     nnData(knnDataSet.dataVector[1], knnDataSet.knnDists[1], knnDataSet.actualIndexVector[1], knnDataSet.dataPoints[:,1])
+end
+
+struct knnUniqueData{T, I}
+    dataVector::Vector{T}
+    actualIndexVector::Vector{I}
+    dataPoints::Matrix{Float64}
+end
+
+function knnUniqueData(dataTree::AbstractDataTree, points::AbstractMatrix{Float64}, k::Int64, sortres = false)
+    knnIdxsVectors, knnDists = knn(dataTree.tree, points, k, sortres)
+    knnIdxs = unique(sort(knnIdxsVectors...))
+    total_k = length(knnIdxs)
+    ty1 = typeof(dataTree.refData.dataDict)
+    dataVector = Vector{ty1.parameters[2]}(undef, total_k)
+    ty2 = typeof(dataTree.refData.pointToActualIndexMap)
+    actualIndexVector = Vector{ty2.parameters[2]}(undef, total_k)
+    pointsMatrix = zeros(length(point), total_k)
+    for i ∈ 1:total_k
+        dataVector[i] = dataTree.refData.dataDict[knnIdxs[i]]
+        actualIndexVector[i] = dataTree.refData.pointToActualIndexMap[knnIdxs[i]]
+        pointsMatrix[:,i] .= dataTree.refData.points[:,knnIdxs[i]]
+    end
+    return knnUniqueData(dataVector, actualIndexVector, pointsMatrix)
 end
 
 struct inrangeData{T, I}

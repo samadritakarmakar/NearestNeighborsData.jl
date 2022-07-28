@@ -90,7 +90,7 @@ end
 
 function knnUniqueData(dataTree::AbstractDataTree, points::AbstractMatrix{Float64}, k::Int64, sortres = false)
     knnIdxsVectors, knnDists = knn(dataTree.tree, points, k, sortres)
-    knnIdxs = unique(sort(vcat(knnIdxsVectors)))
+    knnIdxs = unique(sort(vcat(knnIdxsVectors...)))
     total_k = length(knnIdxs)
     ty1 = typeof(dataTree.refData.dataDict)
     dataVector = Vector{ty1.parameters[2]}(undef, total_k)

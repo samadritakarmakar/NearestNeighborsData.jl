@@ -141,6 +141,7 @@ function knnMinDistData(dataTree::AbstractDataTree, points::AbstractMatrix{Float
             end
             i += 1
         end
+        vec += 1
     end
     knnMinDistData(dataVector, minDists, actualIndexVector, pointsMatrix)
 end

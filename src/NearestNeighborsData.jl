@@ -7,6 +7,6 @@ include("nearestNeighboursData.jl")
 export RefData, addToRefData!
 #from nearestNeighboursData
 export AbstractDataTree, BallDataTree, KDDataTree, knnData, nnData, inrangeData
-export knnUniqueData
+export knnUniqueData, knnMinDistData
 
 end # module

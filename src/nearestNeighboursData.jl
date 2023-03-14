@@ -36,7 +36,7 @@ function KDDataTree(refData::RefData, dimension::Int64 = 3)
         refData.points = reshape(refData.points, dimension, Int64(length(refData.points)/dimension))
         #return KDDataTree(refData, BallTree(reshape(refData.points, dimension, Int64(length(refData.points)/dimension))))
     end
-    return KDDataTree(refData, BallTree(refData.points))
+    return KDDataTree(refData, KDTree(refData.points))
 end
 
 function KDDataTree(data::Union{Dict, Matrix}, points::Union{Dict, Vector, Matrix})
